@@ -1,10 +1,11 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 # Specify your gem's dependencies in nod.gemspec
 gemspec
 
-gem 'thor'
+gem 'mime-types', require: 'mime/types/full'
 gem 'pry'
 gem 'rubyzip'
+gem 'thor'
