@@ -1,8 +1,10 @@
-require 'pry'
 require "nod/base_files"
 require "nod/version"
-require "nod/asset"
 require "nod/initializer"
+require "nod/bundler"
+require "nod/file"
+require "nod/asset"
+require 'nokogiri'
 require 'thor'
 require 'zip'
 
