@@ -14,9 +14,11 @@ module Nod
         file_paths = Dir[::File.join([Dir.pwd, "/#{@name}/*"])]
 
         files = file_paths.map do |file|
-          file_name = ::File.basename(file)
-          mime_type = ::MIME::Types.type_for(file).first.to_s
-          Nod::File.new(file_name, file_name, mime_type)
+          file_name   = ::File.basename(file)
+          mime_type   = ::MIME::Types.type_for(file).first.to_s
+          type        = generate_type(mime_type)
+          orientation = 'LANDSCAPE'
+          Nod::File.new(file_name, file_name, mime_type, type, orientation)
         end
 
         xml = generate_xml(files)
@@ -27,6 +29,14 @@ module Nod
       end
 
       private
+
+      def generate_type(mime_type)
+        if mime_type == 'text/html'
+          'html'
+        else
+          'ancillary'
+        end
+      end
 
       def generate_manifest(xml)
         curr_dir = Dir.pwd
@@ -40,12 +50,10 @@ module Nod
 
       def generate_xml(files)
         builder = ::Nokogiri::XML::Builder.new do |xml|
-          xml.root do
-            xml.assets(name: @name, type: "html", orientation: "LANDSCAPE") do
-              xml.files do 
-                files.each do |file|
-                  xml.file(name: file.name, filename: file.file_name, "mime-type" => file.mime_type, orientation: file.orientation)
-                end
+          xml.assets(name: @name, type: "html", orientation: "LANDSCAPE", await: 'timeout', timeout: '20000') do
+            xml.files do 
+              files.each do |file|
+                xml.file(name: file.name, filename: file.file_name, "mime-type" => file.mime_type, orientation: file.orientation, type: file.type)
               end
             end
           end
