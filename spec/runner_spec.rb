@@ -3,6 +3,7 @@ require 'spec_helper'
 RSpec.describe Nod::Runner do
 
   let (:runner) {Nod::Runner}
+  let (:project_name) {'test-app'}
 
   describe 'with invalid parameters' do
     it 'prints helpful information to the console' do
@@ -19,19 +20,14 @@ RSpec.describe Nod::Runner do
 
     context 'with valid parameters' do
       it 'creates a new project when provided a project name' do
-        project_name = 'test-app'
         params = ['init'].push(project_name)
 
         runner.start(params)
 
         expect(Dir.exists?(project_name)).to be true
-
-        # remove new project
-        FileUtils.remove_dir(project_name)
       end
 
       it 'creates a new project when provided multiple params' do
-        project_name = "test-app"
         other_params = ['foo', 'bar', 'baz']
 
         params = ['init'].push(project_name)
@@ -41,10 +37,22 @@ RSpec.describe Nod::Runner do
         runner.start(params)
 
         expect(Dir.exists?(project_name)).to be true
-
-        # remove new project
-        FileUtils.remove_dir(project_name)
       end
+
+      it 'raises an error if the asset already exists' do
+        params = ['init'].push(project_name)
+
+        # create 'test-app' project
+        runner.start(params)
+
+        # try to create the same project
+        expect { runner.start(params) }.to raise_error
+      end
+    end
+
+    after(:each) do
+      # remove new project
+      FileUtils.remove_dir(project_name) if File.exists?(project_name)
     end
   end
 end
