@@ -37,4 +37,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rubyzip"
   spec.add_dependency "nokogiri"
   spec.add_dependency "mime-types"
+  spec.add_dependency "rest-client"
 end
