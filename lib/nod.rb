@@ -6,10 +6,13 @@ require "nod/initializer"
 require "nod/bundler"
 require "nod/file"
 require "nod/asset"
+require "nod/client"
 require 'nokogiri'
 require 'thor'
 require 'zip'
 require 'mime-types'
+require 'rest-client'
+require 'json'
 
 module Nod
   class Runner < Thor 
