@@ -46,11 +46,17 @@ RSpec.describe Nod::Client do
 
   describe '#authenticate' do
     context 'successful authentication' do
-      it 'returns a 200 HTTP status code' do
+      before do
         email    = ENV['EMAIL']
         password = ENV['PASSWORD']
-        creds = { email: email, password: password }
-        expect(client.new(creds).authenticate.code).to eql 200
+        @creds = { email: email, password: password }
+      end
+      it 'returns a 200 HTTP status code' do
+        expect(client.new(@creds).authenticate.code).to eql 200
+      end
+      it 'returns authentication cookies' do
+        # be more specific about the expectation than just a truthy value
+        expect(client.new(@creds).authenticate.cookies).to be_truthy
       end
     end
     context 'unsuccessful authentication' do

@@ -17,16 +17,22 @@ module Nod
     def authenticate
       login_url = BASE_URL + '/Member/Login'
 
-      payload = {  'EmailAddress' =>  @email,
-                   'Password'     =>  @password }
+      payload = {  'EmailAddress'=>  @email,
+                   'Password'    =>  @password }
 
-      headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
+      headers = { content_type: 'multipart/form-data' }
 
-      resp = RestClient.post(login_url, payload.to_json, headers)
-
-      raise Nod::AuthenticationError.new("Invalid Login Credentials") unless successful_response?(resp.body)
-
-      resp
+      RestClient.post(login_url, payload) do |response|
+        # follow redirect
+        if [301, 302, 307].include? response.code
+          redirect = response.follow_get_redirection
+          @cookies = redirect.cookies
+          redirect
+        else
+          # raise exception
+          raise Nod::AuthenticationError.new("Invalid Login Credentials")
+        end
+      end
     end
 
     private
