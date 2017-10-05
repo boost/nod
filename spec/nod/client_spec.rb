@@ -51,9 +51,11 @@ RSpec.describe Nod::Client do
         password = ENV['PASSWORD']
         @creds = { email: email, password: password }
       end
+
       it 'returns a 200 HTTP status code' do
         expect(client.new(@creds).authenticate.code).to eql 200
       end
+
       it 'returns authentication cookies' do
         # be more specific about the expectation than just a truthy value
         expect(client.new(@creds).authenticate.cookies).to be_truthy
@@ -66,6 +68,17 @@ RSpec.describe Nod::Client do
         creds = { email: email, password: password }
         expect { client.new(creds).authenticate.code }.to raise_error Nod::AuthenticationError
       end
+    end
+
+    after do
+      email    = ENV['EMAIL']
+      password = ENV['PASSWORD']
+      creds    = { email: email, password: password }
+      # perform successful authentication
+      # to refresh Nod auth status.
+      # too many unsuccessful authentications
+      # equals disabled account. Not fun.
+      client.new(creds).authenticate
     end
   end
 end
