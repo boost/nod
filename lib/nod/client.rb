@@ -32,6 +32,10 @@ module Nod
         end
       end
     end
+
+    def authenticated?
+      !!@cookies rescue false
+    end
   end
 end
 
