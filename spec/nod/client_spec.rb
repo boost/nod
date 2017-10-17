@@ -49,6 +49,13 @@ RSpec.describe Nod::Client do
   describe '#authenticate' do
     context 'successful authentication' do
       before do
+        rest_client_double_attributes = { 
+                                          code: 200,
+                                          cookies: { '.ASPXAUTH'  => 'EATTHECOOKIE',
+                                                     '.SESSIONID' => 'ID12345' }
+                                        }
+        rest_client_double = double('RestClient', rest_client_double_attributes)
+        allow(RestClient).to receive(:post).and_return(rest_client_double)
         @creds = { email: email, password: password }
       end
 
@@ -67,6 +74,14 @@ RSpec.describe Nod::Client do
 
         # be more specific about the expectation than just a truthy value
         expect(c.cookies).to be_truthy
+      end
+
+      it 'sets the window code as an accessible attribute' do
+        # auth
+        c = client.new(@creds.authenticate)
+
+        # be more specific about the expectation than just a truthy value
+        expect(c.window_code).to be_truthy
       end
     end
     context 'unsuccessful authentication' do
@@ -106,5 +121,42 @@ RSpec.describe Nod::Client do
 
         expect(c.authenticated?).to be false
       end
+  end
+
+  describe '#deploy' do
+    context 'AUTHENTICATED' do
+      before do
+        @auth_client = client.new({email: email, password: password})
+        @auth_client.authenticate
+
+        project_name = 'test-project'
+
+        @mocked_asset = double('asset', class: Nod::Asset, file_path: "#{project_name}_assets.zip")
+      end
+
+      it 'returns true when deploy is successful' do
+        # stub RestClient post call to return successful response
+        post_response = double('response', body: { 'Data' => {} }.to_json)
+        allow(RestClient).to receive(:post).and_return(post_response)
+
+        expect(@auth_client.deploy(@mocked_asset)).to be true
+      end
+      it 'returns false when the deploy is unsuccessful ' do
+        # stub RestClient post call to return Nod Error Message
+        post_response = double('response', body: {'Error' => 'There was an error performing the requested action.' }.to_json)
+        allow(RestClient).to receive(:post).and_return(post_response)
+
+        expect(@auth_client.deploy(@mocked_asset)).to be false
+      end
+      it 'raises an error if the asset is nil' do
+        asset = nil
+        expect { @auth_client.deploy(asset) }.to raise_error('No Asset to Deploy!')
+      end
+      it 'raises an error if the asset file is not a .zip file' do
+        unzipped_file = 'unzipped_file.txt'
+        allow(@mocked_asset).to receive(:file_path).and_return(unzipped_file)
+        expect { @auth_client.deploy(@mocked_asset) }.to raise_error('Bundled Asset must be in .zip format')
+      end
+    end
   end
 end
