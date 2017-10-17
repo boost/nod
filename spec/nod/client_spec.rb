@@ -52,7 +52,8 @@ RSpec.describe Nod::Client do
         rest_client_double_attributes = { 
                                           code: 200,
                                           cookies: { '.ASPXAUTH'  => 'EATTHECOOKIE',
-                                                     '.SESSIONID' => 'ID12345' }
+                                                     '.SESSIONID' => 'ID12345' },
+                                          window_code: 'f1d4'
                                         }
         rest_client_double = double('RestClient', rest_client_double_attributes)
         allow(RestClient).to receive(:post).and_return(rest_client_double)
@@ -78,7 +79,7 @@ RSpec.describe Nod::Client do
 
       it 'sets the window code as an accessible attribute' do
         # auth
-        c = client.new(@creds.authenticate)
+        c = client.new(@creds).authenticate
 
         # be more specific about the expectation than just a truthy value
         expect(c.window_code).to be_truthy
@@ -139,12 +140,18 @@ RSpec.describe Nod::Client do
         post_response = double('response', body: { 'Data' => {} }.to_json)
         allow(RestClient).to receive(:post).and_return(post_response)
 
+        # stub opening a file
+        allow(::File).to receive(:open).and_return('I am the data')
+
         expect(@auth_client.deploy(@mocked_asset)).to be true
       end
       it 'returns false when the deploy is unsuccessful ' do
         # stub RestClient post call to return Nod Error Message
         post_response = double('response', body: {'Error' => 'There was an error performing the requested action.' }.to_json)
         allow(RestClient).to receive(:post).and_return(post_response)
+
+        # stub opening a file
+        allow(::File).to receive(:open).and_return('I am the data')
 
         expect(@auth_client.deploy(@mocked_asset)).to be false
       end
