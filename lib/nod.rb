@@ -17,8 +17,7 @@ module Nod
   class Runner < Thor
     desc 'init <name>', 'Creates a new template'
     def init(name, *args)
-      asset = Nod::Asset::Initializer.new(name)
-      asset.create_new_project
+      Nod::Asset.create_new_project(name)
     end
 
     desc 'bundle <name>', 'Creates a .zip file of a project\'s assets'
