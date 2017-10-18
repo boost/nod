@@ -2,7 +2,7 @@ require 'pry'
 require "nod/helpers"
 require "nod/version"
 require "nod/initializer"
-require "nod/bundler"
+require "nod/asset_bundle"
 require "nod/file"
 require "nod/asset"
 require "nod/client"
@@ -14,16 +14,16 @@ require 'rest-client'
 require 'json'
 
 module Nod
-  class Runner < Thor 
+  class Runner < Thor
     desc 'init <name>', 'Creates a new template'
     def init(name, *args)
       asset = Nod::Asset::Initializer.new(name)
       asset.create_new_project
     end
 
-    desc 'bundle <name>', 'Creates a .zip file of a project\'s assets' 
+    desc 'bundle <name>', 'Creates a .zip file of a project\'s assets'
     def bundle(name, *args)
-      asset = Nod::Asset::Bundler.new(name)
+      asset = Nod::AssetBundle.new(name)
       asset.bundle
     end
 
