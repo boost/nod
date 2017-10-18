@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
       "public gem pushes."
   end
 
-  spec.files         = Dir['lib/*.rb'] + Dir['bin/*']
+  spec.files         = Dir['lib/*.rb'] + Dir['bin/*'] + Dir['lib/nod/*.rb']
   spec.bindir        = "bin"
   spec.executables   = ['nod']
   spec.require_paths = ["lib"]
