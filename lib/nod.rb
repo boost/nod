@@ -1,6 +1,5 @@
 require 'pry'
 require "nod/helpers"
-require "nod/base_files"
 require "nod/version"
 require "nod/initializer"
 require "nod/bundler"
