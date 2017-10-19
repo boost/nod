@@ -1,11 +1,12 @@
 require 'pry'
 require "nod/helpers"
+require "nod/root"
 require "nod/version"
-require "nod/initializer"
 require "nod/asset_bundle"
 require "nod/file"
 require "nod/asset"
 require "nod/client"
+require "nod/asset"
 require 'nokogiri'
 require 'thor'
 require 'zip'

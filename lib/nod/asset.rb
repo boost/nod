@@ -3,7 +3,7 @@ module Nod
   class Asset
     extend Helpers
 
-    BASE_FILES = Dir[::File.join([::File.dirname(::File.expand_path(__FILE__)), 'base-files/*'])]
+    BASE_FILES = Dir[::File.join([Nod.root, 'base-files/*'])]
 
     def self.create_new_project(name)
       create_asset_directory(name)
