@@ -1,9 +1,9 @@
 
 require 'spec_helper'
 
-RSpec.describe BASE_FILES do
-  let (:base_files) {BASE_FILES.map {|file| File.basename(file)} }
-  
+RSpec.describe Nod::Asset do
+  let (:base_files) {Nod::Asset::BASE_FILES.map {|file| File.basename(file)} }
+
   it 'contains a main javascript file' do
     expect(base_files).to include('main.js')
   end
