@@ -3,7 +3,7 @@ module Nod
   class AssetBundle
     include Helpers
 
-    attr_accessor :file_path, :file
+    attr_accessor :file_path, :file, :name
 
     def initialize(name)
       @name      = name
