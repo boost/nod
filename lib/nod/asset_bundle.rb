@@ -3,8 +3,10 @@ module Nod
   class AssetBundle
     include Helpers
 
+    attr_accessor :file_path, :file
+
     def initialize(name)
-      @name = name
+      @name      = name
     end
 
     def bundle
@@ -25,6 +27,42 @@ module Nod
       file_paths.push( manifest )
 
       zip_assets(file_paths)
+    end
+
+    def self.find(bundle_name)
+      raise 'Asset doesn\'t exist' unless asset_exists?(bundle_name)
+
+      # generate file path
+      file_path = generate_file_path(bundle_name)
+
+      # check file if it can be read
+      raise 'Incorrect Bundle File type' unless correct_bundle_file_type?(file_path)
+
+      # read file
+      file = read_file(file_path)
+
+      asset_bundle           = new(bundle_name)
+      asset_bundle.file_path = file_path
+      asset_bundle.file      = file
+      asset_bundle
+    end
+
+    # private class methods
+
+    class << self
+      private
+
+      def generate_file_path(bundle_name)
+        Dir.pwd + bundle_name
+      end
+
+      def read_file(file_path)
+        ::File.read(file_path)
+      end
+
+      def correct_bundle_file_type?(bundle_file)
+        bundle_file.include?(".zip") ? true : false
+      end
     end
 
     private
