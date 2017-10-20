@@ -4,6 +4,16 @@ require 'spec_helper'
 RSpec.describe Nod::AssetBundle do
   let(:asset_bundle) { Nod::AssetBundle }
   let(:project_name) { 'test-project' }
+
+  describe '::new' do
+    it 'sets the name attribute' do
+      expect(asset_bundle.new(project_name).name).to eql project_name
+    end
+    it 'returns an AssetBundle object' do
+      expect(asset_bundle.new(project_name)).to be_a asset_bundle
+    end
+  end
+
   describe '::find' do
     it 'raises an error if asset bundle cannot be found' do
       unknown_project = 'not-a-project.zip'
