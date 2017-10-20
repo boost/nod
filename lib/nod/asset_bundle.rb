@@ -3,18 +3,19 @@ module Nod
   class AssetBundle
     include Helpers
 
-    attr_accessor :file_path, :file
+    attr_accessor :file_path, :file, :name, :asset_files
 
     def initialize(name)
-      @name      = name
+      @name        = name
+      @asset_files = []
     end
 
     def bundle
-      raise "Asset doesn't exists." unless asset_exists?(@name)
+      raise "Asset doesn't exist" unless asset_exists?(@name)
 
-      file_paths = Dir[::File.join([Dir.pwd, "/#{@name}/*"])]
+      @asset_files = Dir[::File.join([Dir.pwd, "/#{@name}/*"])]
 
-      files = file_paths.map do |file|
+      files = @asset_files.map do |file|
         file_name   = ::File.basename(file)
         mime_type   = ::MIME::Types.type_for(file).first.to_s
         type        = generate_type(mime_type)
@@ -24,9 +25,13 @@ module Nod
 
       xml = generate_xml(files)
       manifest = generate_manifest(xml)
-      file_paths.push( manifest )
+      @asset_files.push(manifest)
 
-      zip_assets(file_paths)
+      zip_assets(@asset_files)
+    end
+
+    def list_files
+      @asset_files
     end
 
     def self.find(bundle_name)
