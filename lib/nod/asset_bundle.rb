@@ -57,8 +57,9 @@ module Nod
     class << self
       private
 
-      def generate_file_path(bundle_name)
-        Dir.pwd + bundle_name
+      def generate_file_path(name)
+        bundle = name + '_assets.zip'
+        [Dir.pwd, bundle].join('/')
       end
 
       def read_file(file_path)
