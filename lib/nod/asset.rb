@@ -10,9 +10,9 @@ module Nod
       BASE_FILES.each do |file|
         # TODO change ::File
         path = ::File.join([Dir.pwd, name, ::File.basename(file)])
-        puts "Creating: '#{file}'"
+        puts "Creating: '#{path}'"
         FileUtils.cp(file, path)
-        puts "Successfully created: '#{file}'"
+        puts "Successfully created: '#{path}'"
       end
     end
 
