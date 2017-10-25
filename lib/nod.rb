@@ -27,9 +27,23 @@ module Nod
       asset.bundle
     end
 
-    # TODO
-    # desc 'deploy <asset-name>', 'Deploy files to a specific asset'
-    # def deploy(name, *args)
-    # end
+    desc 'deploy <asset-name>', 'Deploy files to a specific asset'
+    def deploy(name, *args)
+      # retrieve credentials from ENVIRONMENT
+      email    = ENV['EMAIL']
+      password = ENV['PASSWORD']
+
+      # generate Nod client
+      client   = Nod::Client.new({ email: email, password: password })
+
+      # authenticate client
+      client.authenticate
+
+      # find Nod Asset Bundle
+      project  = Nod::AssetBundle.find(name)
+
+      # deploy project (asset bundle)
+      client.deploy(project)
+    end
   end
 end
