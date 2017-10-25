@@ -1,6 +1,11 @@
 require "bundler/setup"
 require "nod"
 require 'fakefs/spec_helpers'
+require 'vcr'
+require 'support/vcr-setup'
+
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true)  
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
