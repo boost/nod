@@ -1,7 +1,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Nod::AssetBundle do
+RSpec.describe Nod::AssetBundle, fakefs: true do
   let(:asset_bundle) { Nod::AssetBundle }
   let(:project_name) { 'test-project' }
 
