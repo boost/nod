@@ -2,6 +2,16 @@
 require 'spec_helper'
 
 RSpec.describe Nod::AssetBundle, fakefs: true do
+  before do
+    base_files = ::File.join([Nod.root, '/base-files/*'])
+
+    # include base files in fake file system
+    FakeFS::FileSystem.clone(base_files)
+
+    # start fake file system
+    FakeFS.activate!
+  end
+
   let(:asset_bundle) { Nod::AssetBundle }
   let(:project_name) { 'test-project' }
 
@@ -36,6 +46,21 @@ RSpec.describe Nod::AssetBundle, fakefs: true do
       allow(Zip::File).to receive(:open).and_return(files)
 
       expect(bundled_obj.bundle).to eql files
+    end
+    it 'overwrites a previously bundled asset' do
+      # create and bundle an asset
+      puts `ls base-files/`
+      asset         = Nod::Asset.create_new_project(project_name)
+      bundled_asset = Nod::AssetBundle.new(asset).bundle
+
+      # check project exists
+      expect(::File.exists?(bundled_asset.file_path)).to be true
+
+      # rebundle
+      bundled_asset.bundle
+
+      # check project still exists
+      expect(::File.exists?(bundled_asset.file_path)).to be true
     end
   end
 
