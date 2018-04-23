@@ -11,7 +11,7 @@ module Nod
     def self.load_from_file(file_path)
       credentials = JSON.parse(::File.read(file_path))
 
-      new credentials[:email], credentials[:password]
+      new credentials['email'], credentials['password']
     end
   end
 end
