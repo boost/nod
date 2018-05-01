@@ -44,13 +44,6 @@ RSpec.describe Nod::AssetBundle do
       unknown_project = 'not-a-project.zip'
       expect { asset_bundle.find(unknown_project) }.to raise_error 'Asset doesn\'t exist'
     end
-    it 'raises an error if the asset bundle is not in .zip format' do
-      # mock fake asset to exist (to return a true value)
-      allow_any_instance_of(Nod::Helpers).to receive(:asset_exists?).and_return(true)
-
-      text_file = 'file.txt'
-      expect { asset_bundle.find(text_file) }.to raise_error 'Incorrect Bundle File type'
-    end
 
     context 'found AssetBundle object' do
       before(:each) do
