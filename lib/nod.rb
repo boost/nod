@@ -27,9 +27,8 @@ module Nod
       asset.bundle
     end
 
-    # TODO
-    # desc 'deploy <asset-name>', 'Deploy files to a specific asset'
-    # def deploy(name, *args)
-    # end
+    desc 'deploy <asset-name>', 'Deploy files to a specific asset'
+    def deploy(name, *args)
+    end
   end
 end

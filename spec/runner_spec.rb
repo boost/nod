@@ -100,6 +100,13 @@ RSpec.describe Nod::Runner do
     end
   end
 
+  describe '::deploy' do
+    it 'raises an error if no project name is provided' do
+      params = ['deploy']
+      expect { Nod::Runner.start(params) }.to output(/ERROR/).to_stderr
+    end
+  end
+
   after do
     # delete test projects in case they still remain
     FileUtils.remove_dir(project_name) if File.exists?(project_name)
