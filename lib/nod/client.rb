@@ -3,22 +3,15 @@ module Nod
   class Client
     BASE_URL = 'https://go.nodmedia.io'
 
-    attr_reader :email, :password
-
     def initialize(credentials)
-      raise AuthenticationError.new('Provided credentials not in hash format') if credentials.class != Hash
-      raise AuthenticationError.new('Please provide email') if credentials[:email].nil?
-      raise AuthenticationError.new('Please provide password') if credentials[:password].nil?
-
-      @email = credentials[:email]
-      @password = credentials[:password]
+      @credentials = credentials
     end
 
     def authenticate
       login_url = BASE_URL + '/Member/Login'
 
-      payload = {  'EmailAddress'=>  @email,
-                   'Password'    =>  @password }
+      payload = {  'EmailAddress'=>  @credentials.email,
+                   'Password'    =>  @credentials.password }
 
       RestClient.post(login_url, payload) do |response|
         # follow redirect

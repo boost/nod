@@ -101,9 +101,22 @@ RSpec.describe Nod::Runner do
   end
 
   describe '::deploy' do
-    it 'raises an error if no project name is provided' do
+    it 'raises an error when no asset bundle file is provided' do
       params = ['deploy']
-      expect { Nod::Runner.start(params) }.to output(/ERROR/).to_stderr
+
+      expect { runner.start(params) }.to output(/ERROR/).to_stderr
+    end
+
+    context 'client authentication' do
+      let(:params) { ['deploy'] }
+      context 'with invalid login credentials' do
+        it 'raises an error' do
+          # Mock failed authentication
+          allow_any_instance_of(Nod::Client).to receive(:authenticate).and_return(Nod::AuthenticationError.new('Invalid Login Credentials'))
+
+          expect { runner.start(params) }.to output(/ERROR/).to_stderr
+        end
+      end
     end
   end
 
