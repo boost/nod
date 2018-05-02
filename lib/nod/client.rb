@@ -3,8 +3,6 @@ module Nod
   class Client
     BASE_URL = 'https://go.nodmedia.io'
 
-    attr_reader :email, :password
-
     def initialize(credentials)
       @credentials = credentials
     end
