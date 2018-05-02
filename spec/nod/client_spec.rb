@@ -10,40 +10,9 @@ RSpec.describe Nod::Client do
   end
 
   describe '#initialize' do
+    #TODO
     let(:fake_email) { 'test@test.com' }
     let(:fake_password) { 'testo Majesto' }
-
-    before do
-      @creds = { email: fake_email, password: fake_password }
-    end
-
-    context 'invalid parameters' do
-      it 'raises an error if no email is provided' do
-        @creds[:email] = nil
-        expect{ client.new(@creds) }.to raise_error Nod::AuthenticationError
-      end
-      it 'raises an error if no password is provided' do
-        @creds[:password] = nil
-        expect{ client.new(@creds) }.to raise_error Nod::AuthenticationError
-      end
-      it 'raises an error if the credentials argument is a string' do
-        creds = ''
-        expect{ client.new(creds) }.to raise_error Nod::AuthenticationError
-      end
-      it 'raises an error if the credentials argument is an number' do
-        creds = 1
-        expect{ client.new(creds) }.to raise_error Nod::AuthenticationError
-      end
-    end
-
-    context 'valid parameters' do
-      it 'sets the email' do
-        expect(client.new(@creds).email).to eql fake_email
-      end
-      it 'sets the password' do
-        expect(client.new(@creds).password).to eql fake_password
-      end
-    end
   end
 
   describe '#authenticate' do
