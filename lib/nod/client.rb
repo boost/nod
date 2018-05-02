@@ -54,6 +54,16 @@ module Nod
       # return if the deployment went well or not
       response_body['Error'] ? false : true
     end
+
+    def list_assets
+      raise AuthenticationError.new('Client has not been successfully authenticated!') unless authenticated?
+
+      url = [BASE_URL, 'api/asset/list?windowCode=', @window_code].join('/')
+
+      response = RestClient.get(url, cookies: @cookies)
+
+      JSON.parse(response.body)['Data']
+    end
   end
 end
 

@@ -99,4 +99,21 @@ RSpec.describe Nod::Client do
       end
     end
   end
+
+  describe '#list_assets' do
+    let(:credentials) { Nod::Credentials.new(email, password) }
+
+    it 'returns a list' do
+      authenticated_client = client.new(credentials)
+      authenticated_client.authenticate
+
+      expect(authenticated_client.list_assets).to be_a Array
+    end
+
+    it 'raises an authentication error if client is not authenticated' do
+      unauthenticated_client = client.new('blah')
+
+      expect { unauthenticated_client.list_assets }.to raise_error Nod::AuthenticationError
+    end
+  end
 end
