@@ -29,13 +29,13 @@ module Nod
 
     desc 'deploy <asset-name>', 'Deploy files to a specific asset'
     def deploy(name, *args)
-      puts 'Please enter email:\n'
-      email = gets.chomp
+      puts "Please enter email:\n"
+      email = STDIN.gets.chomp
 
       puts 'Please enter password'
-      password = gets.chomp
+      password = STDIN.gets.chomp
 
-      client = Nod::Client.new(creds)
+      client = Nod::Client.new(email, password)
       client.authenticate
 
       asset_bundle = Nod::AssetBundle.find(name)
