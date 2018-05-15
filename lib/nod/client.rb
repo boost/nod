@@ -3,15 +3,16 @@ module Nod
   class Client
     BASE_URL = 'https://go.nodmedia.io'
 
-    def initialize(credentials)
-      @credentials = credentials
+    def initialize(email, password)
+      @email = email
+      @password = password
     end
 
     def authenticate
       login_url = BASE_URL + '/Member/Login'
 
-      payload = {  'EmailAddress'=>  @credentials.email,
-                   'Password'    =>  @credentials.password }
+      payload = {  'EmailAddress'=>  @email,
+                   'Password'    =>  @password }
 
       RestClient.post(login_url, payload) do |response|
         # follow redirect

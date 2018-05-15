@@ -6,7 +6,6 @@ require "nod/asset_bundle"
 require "nod/file"
 require "nod/asset"
 require "nod/client"
-require "nod/credentials"
 require "nod/asset"
 require 'nokogiri'
 require 'thor'
@@ -30,7 +29,11 @@ module Nod
 
     desc 'deploy <asset-name>', 'Deploy files to a specific asset'
     def deploy(name, *args)
-      creds = Nod::Credentials.load_from_file('./credentials.json')
+      puts 'Please enter email:\n'
+      email = gets.chomp
+
+      puts 'Please enter password'
+      password = gets.chomp
 
       client = Nod::Client.new(creds)
       client.authenticate

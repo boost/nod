@@ -27,9 +27,7 @@ RSpec.describe Nod::Client do
 
   describe '#authenticated?' do
       it 'returns true if the client has successfully authenticated' do
-        creds = { email: email, password: password }
-
-        c = client.new(creds)
+        c = client.new(email, password)
 
         # TEMP MOCK
         c.instance_variable_set(:@cookies, true)
@@ -41,9 +39,10 @@ RSpec.describe Nod::Client do
         expect(c.authenticated?).to be true
       end
       it 'returns false if the client has not been authenticated' do
-        creds = { email: 'fake@email.com', password: 'notarealpassword' }
+        email = 'fake@email.com'
+        password = 'notarealpassword'
 
-        c = client.new(creds)
+        c = client.new(email, password)
 
         expect(c.authenticated?).to be false
       end
@@ -52,7 +51,7 @@ RSpec.describe Nod::Client do
   describe '#deploy' do
     context 'AUTHENTICATED' do
       before do
-        @auth_client = client.new({email: email, password: password})
+        @auth_client = client.new(email, password)
 
         # TEMP MOCK
         @auth_client.instance_variable_set(:@cookies, true)
@@ -101,17 +100,15 @@ RSpec.describe Nod::Client do
   end
 
   describe '#list_assets' do
-    let(:credentials) { Nod::Credentials.new(email, password) }
-
     it 'returns a list' do
-      authenticated_client = client.new(credentials)
+      authenticated_client = client.new(email, password)
       authenticated_client.authenticate
 
       expect(authenticated_client.list_assets).to be_a Array
     end
 
     it 'raises an authentication error if client is not authenticated' do
-      unauthenticated_client = client.new('blah')
+      unauthenticated_client = client.new('blah', 'be bop')
 
       expect { unauthenticated_client.list_assets }.to raise_error Nod::AuthenticationError
     end
