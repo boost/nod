@@ -113,4 +113,19 @@ RSpec.describe Nod::Client do
       expect { unauthenticated_client.list_assets }.to raise_error Nod::AuthenticationError
     end
   end
+
+  describe '#list_data_feeds' do
+    it 'returns a list' do
+      authenticated_client = client.new(email, password)
+      authenticated_client.authenticate
+
+      expect(authenticated_client.list_data_feeds).to be_a Array
+    end
+
+    it 'raises an authentication error if client is not authenticated' do
+      unauthenticated_client = client.new('blah', 'be bop')
+
+      expect { unauthenticated_client.list_data_feeds }.to raise_error Nod::AuthenticationError
+    end
+  end
 end

@@ -59,11 +59,23 @@ module Nod
     def list_assets
       raise AuthenticationError.new('Client has not been successfully authenticated!') unless authenticated?
 
-      assets_endpoint = 'api/asset/list?windowCode='
+      assets_endpoint = '/api/asset/list?windowCode='
 
-      url = [BASE_URL, assets_endpoint, @window_code].join('/')
+      url = [BASE_URL, assets_endpoint, @window_code].join('')
 
       response = RestClient.get(url, cookies: @cookies)
+
+      JSON.parse(response.body)['Data']
+    end
+
+    def list_data_feeds
+      raise AuthenticationError.new('Client has not been successfully authenticated') unless authenticated?
+
+      data_feeds_endpoint = '/api/feed/list?windowCode='
+
+      url = [BASE_URL, data_feeds_endpoint, @window_code].join('')
+
+      response = RestClient.get(url, cookies: @cookies, content_type: 'application/json')
 
       JSON.parse(response.body)['Data']
     end
